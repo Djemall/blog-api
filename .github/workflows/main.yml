@@ -1,0 +1,21 @@
+name: A workflow for my Hello World file
+on: push
+
+  jobs:
+    test:
+      name: testing
+      image: djemalsa/blog_php
+    before_script: 
+      - composer install
+    script: bin/phpunit      
+
+    deploy:
+      name: deploying
+      image: ruby
+      before_script:
+        - gem install dpl
+      script:
+        - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_STAGING_API_KEY
+      only: 
+        - master
+      when: on_success
