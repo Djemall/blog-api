@@ -4,7 +4,7 @@ on: push
 
 jobs:
   hadolint:
-    runs-on: unbuntu-latest
+    runs-on: unbutu-latest
     name: Check docker images (Hadolint)
     container: hadolint/hadolint
     steps:
@@ -15,7 +15,7 @@ jobs:
 
   deploy:
     name: Run unit test (PHPUnit)
-    runs-on: unbuntu-latest
+    runs-on: unbutu-latest
     container: djemal/blog_php
     needs:
       - hadolint
