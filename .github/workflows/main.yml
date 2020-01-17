@@ -1,33 +1,29 @@
-  on: push
+name: Tests 
+on: push
 
-  jobs:
-    test:
-      runs-on: unbuntu-latest
-      name: testing script
-      steps:
-      - name: testing
-        uses: actions/checkout@v1
-        with:
-          who-to-greet: 'Djemal'
-          id: test
-      - name: composer
-        container: djemalsa/blog_php
-        run: composer install 
-      - name: install bin
-        run: bin/phpunit
-   
 
-    deploy:
-      name: deploying
-      runs-on: ruby
-      steps:
-      - name: which uses
-        uses: actions/heroku@master
-        with:
-          who-to-greet: 'Djemal'
-        id: deploy
-      - name: dpl
-        run: gem install dpl
-      - name: provider 
-        run: dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_STAGING_API_KEY
+jobs:
+  hadolint:
+    runs-on: unbuntu-latest
+    name: Check docker images (Hadolint)
+    container: hadolint/hadolint
+    steps:
+      - name: checking source code
+        uses: actions/checkout@v2
+      - name: hadolint testing code
+        run: hadolint Dockerfile
 
+  deploy:
+    name: Run unit test (PHPUnit)
+    runs-on: unbuntu-latest
+    container: djemal/blog_php
+    needs:
+      - hadolint
+    steps:
+      - name: Checkout source code
+        uses: actions/checkout@v2
+      - name: Install dependencies (composer)
+        run: composer install
+      - name: run unit tests 
+        run: php bin/phpunit
+ 
