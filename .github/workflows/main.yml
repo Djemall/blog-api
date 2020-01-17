@@ -3,19 +3,32 @@ on: push
 
   jobs:
     test:
-      name: testing
-      image: djemalsa/blog_php
-    before_script: 
-      - composer install
-    script: bin/phpunit      
+      runs-on: unbuntu-latest
+      name: testing script
+      steps:
+        - name: testing
+          uses: actions/checkout@v1
+          with:
+            who-to-greet: 'Djemal'
+          id: test
+        - name: composer
+          container: djemalsa/blog_php
+          run: composer install 
+        - name: install bin
+          run: bin/phpunit
+   
 
     deploy:
       name: deploying
-      image: ruby
-      before_script:
-        - gem install dpl
-      script:
-        - dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_STAGING_API_KEY
-      only: 
-        - master
-      when: on_success
+      runs-on: ruby
+      steps:
+        - name: which uses
+          uses: actions/heroku@master
+         with:
+           who-to-greet: 'Djemal'
+         id: deploy
+        - name: dpl
+          run: gem install dpl
+        - name: provider 
+          run: dpl --provider=heroku --app=$HEROKU_APP --api-key=$HEROKU_STAGING_API_KEY
+
