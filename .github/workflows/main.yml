@@ -15,7 +15,7 @@ jobs:
 
   test-unit:
     name: Run unit test (PHPUnit)
-    runs-on: unbuntu-latest
+    runs-on: ubuntu-latest
     container: djemal/blog_php
     needs:
       - hadolint
