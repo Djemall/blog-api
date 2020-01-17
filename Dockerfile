@@ -29,8 +29,6 @@ FROM base_php as php_dev
 
 COPY --from=composer /usr/bin/composer /usr/bin/composer
 
-RUN pecl install xdebug && \
-  docker-php-ext-enable xdebug
 COPY .docker/php/conf.d/xdebug.ini "$PHP_INI_DIR/conf.d/"
 
 FROM nginx:1.17.6-alpine as base_nginx
